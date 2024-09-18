@@ -37,9 +37,21 @@ const Upload = ({setImg}) => {
     };
     
     const onUploadStart = evt => {
-        console.log("Start", evt);
-        // don't change anything but isLoading
-        setImg((prev)=>({...prev, isLoading: true}));
+        const file = evt.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            // don't change anything but isLoading
+            setImg((prev)=>({...prev, isLoading: true, aiData:{
+                inlineData:{
+                    data: reader.result.split(",")[1], //get the code version of the image
+                    mimeType: file.type,
+                },
+            },
+        }));
+        };
+        reader.readAsDataURL(file);
+        
     };
 
     return (
